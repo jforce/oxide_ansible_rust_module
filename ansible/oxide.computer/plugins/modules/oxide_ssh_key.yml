@@ -1,6 +1,6 @@
 DOCUMENTATION:
   module: oxide_ssh_key
-  short_description: Manage user SSH keys in Oxide Cloud Computer
+  short_description: Manage user SSH keys.
   description:
     - Manage the SSH public keys for the user associated with the API token.
   options:
@@ -42,6 +42,9 @@ DOCUMENTATION:
       choices: ['present', 'absent']
   author:
     - James Force (@jforce)
+  seealso:
+    - module: oxide_ssh_key_info
+      description: Lists and fetch SSH keys.
 
 EXAMPLES: |
 

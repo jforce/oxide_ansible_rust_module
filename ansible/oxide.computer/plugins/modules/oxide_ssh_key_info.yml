@@ -1,0 +1,51 @@
+DOCUMENTATION:
+  module: oxide_ssh_key_info
+  short_description: List and fetch SSH keys.
+  description:
+    - Lists or fetches SSH public keys for the user associated with the API token.
+  options:
+    oxide_host:
+      description:
+        - The base URL of the Oxide API.
+      required: true
+      type: str
+    oxide_token:
+      description:
+        - The API token for authenticating with the Oxide API.
+      required: true
+      type: str
+      no_log: true
+    name:
+      description:
+        - The name or ID of the specific SSH key to fetch.
+        - If omitted, all SSH keys for the authenticated user will be listed.
+      required: false
+      type: str
+  author:
+    - James Force (@jforce)
+  seealso:
+    - module: oxide_ssh_key
+      description: Manage SSH keys (create/delete functionality).
+
+EXAMPLES: |
+
+  - name: Retrieve all SSH keys
+    oxide_ssh_key_info:
+      oxide_host: "https://api.oxide.cloud"
+      oxide_token: "{{ oxide_token }}"
+    register: all_keys
+
+  - name: Display all SSH keys
+    debug:
+      var: all_keys.ssh_keys
+
+  - name: Retrieve a specific SSH key
+    oxide_ssh_key_info:
+      oxide_host: "https://api.oxide.cloud"
+      oxide_token: "{{ oxide_token }}"
+      name: "test-key"
+    register: specific_key
+
+  - name: Display specific SSH key details
+    debug:
+      var: specific_key.ssh_key.public_key
