@@ -18,3 +18,7 @@ codegen-units = 1
 [[bin]]
 name = "oxide_ssh_key"
 path = "src/oxide_ssh_key.rs"
+
+[[bin]]
+name = "oxide_ssh_key_info"
+path = "src/oxide_ssh_key_info.rs"
