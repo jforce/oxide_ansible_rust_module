@@ -1,7 +1,7 @@
 use std::env;
 use std::fs;
 use std::process;
-
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 use reqwest::blocking::Client;
 use serde_json::Value;
@@ -61,7 +61,35 @@ fn main() {
     }
 }
 
+fn validate_name(name: &str) -> Result<(), String> {
+    let pattern = Regex::new(r"^[a-z0-9][a-z0-9-]*[a-z0-9]$").unwrap();
+    if name.len() > 63 {
+        return Err("Name exceeds the maximum length of 63 characters".to_string());
+    }
+    if name.len() < 1 {
+        return Err("Name does not meet the minimum length of 1 character".to_string());
+    }
+    if !pattern.is_match(name) {
+        return Err("Name does not match the required pattern. Names must begin with a lowercase ASCII letter, be composed exclusively of lowercase ASCII, uppercase ASCII, numbers, and '-', and may not end with a '-'. Names cannot be a UUID though they may contain a UUID.".to_string());
+    }
+    Ok(())
+}
+
+// From TF (looks like updates will be introduced in the future)
+// ref: https://github.com/oxidecomputer/console/pull/2589
+//   Update is intentionally unimplemented since SSH keys do not have an update
+//   API. All of its configurable attributes are marked as requiring replacement
+//   to tell Terraform to destroy and create this resource upon change to its
+//   attributes. If an update API is created in the future this method should be
+//   implemented.
+
 fn create_ssh_key(args: &ModuleArgs) -> Result<Response, Box<dyn std::error::Error>> {
+
+    // Validate the name before proceeding
+    if let Err(e) = validate_name(&args.name) {
+        return Err(format!("Invalid key name '{}': {}", args.name, e).into());
+    }
+
     let client = Client::new();
 
     // Check if the key already exists

@@ -45,9 +45,23 @@
         public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
         state: present
 
-    - name: Failure check - this is expected to fail!
-      oxide_ssh_key:
-        name: "{{ key_name }}"
-        public_key: "different key"
-        state: present
+    - name: Check some expected failures
       ignore_errors: true
+      block:
+
+        - name: Attempt to update a key - API will introduce this feature in the future
+          oxide_ssh_key:
+            name: "{{ key_name }}"
+            public_key: "different key"
+            state: present
+
+        - name: Bad name key
+          oxide_ssh_key:
+            name: "{{ item }}"
+            public_key: "different key"
+            state: present
+          loop:
+            - "Bad-Key-Name"
+            - "-bad"
+            - "bad-"
+            - "longbad-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
