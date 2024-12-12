@@ -1,0 +1,62 @@
+DOCUMENTATION:
+  module: oxide_ssh_key
+  short_description: Manage user SSH keys in Oxide Cloud Computer
+  description:
+    - Manage the SSH public keys for the user associated with the API token.
+  options:
+    oxide_host:
+      description:
+        - The base URL of the Oxide API.
+      required: true
+      type: str
+    oxide_token:
+      description:
+        - The API token for authenticating with the Oxide API.
+      required: true
+      type: str
+      no_log: true
+    name:
+      description:
+        - The name of the SSH key to manage.
+      required: true
+      type: str
+    public_key:
+      description:
+        - A public SSH key.
+        - Required when I(state=present).
+      required: false
+      type: str
+    description:
+      description:
+        - A description of the SSH key.
+      required: false
+      type: str
+      default: "Managed by Ansible"
+    state:
+      description:
+        - The desired state of the SSH key.
+        - Use C(present) to create an SSH key.
+        - Use C(absent) to delete an SSH key.
+      required: true
+      type: str
+      choices: ['present', 'absent']
+  author:
+    - James Force (@jforce)
+
+EXAMPLES: |
+
+  - name: Create an SSH key
+    oxide_ssh_key:
+      oxide_host: "https://api.oxide.cloud"
+      oxide_token: "{{ oxide_token }}"
+      name: "mykey"
+      public_key: "ssh-rsa XXXXXX"
+      description: "Managed key"
+      state: present
+
+  - name: Ensure SSH key is absent
+    oxide_ssh_key:
+      oxide_host: "https://api.oxide.cloud"
+      oxide_token: "{{ oxide_token }}"
+      name: "mykey"
+      state: absent

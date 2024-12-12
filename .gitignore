@@ -1,0 +1,4 @@
+source/Cargo.lock
+source/target/*
+ansible/oxide_vault.yml
+ansible/.vault_pass.txt

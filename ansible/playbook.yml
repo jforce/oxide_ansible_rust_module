@@ -1,0 +1,53 @@
+---
+- name: Test the oxide_ssh_key module
+  hosts: localhost
+  vars:
+    key_name: "rusty-ansible-key"
+  vars_files:
+    - ./oxide_vault.yml
+  module_defaults:
+    oxide_ssh_key:
+      oxide_host: "{{ oxide_api }}"
+      oxide_token: "{{ oxide_token }}"
+  tasks:
+
+    - name: Create SSH key
+      oxide_ssh_key:
+        name: "{{ key_name }}"
+        public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+        description: "Created by Ansible"
+        state: present
+
+    - name: Idempodency check
+      oxide_ssh_key:
+        name: "{{ key_name }}"
+        public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+        description: "Created by Ansible"
+        state: present
+
+    - name: Pause
+      pause:
+        seconds: 15
+
+    - name: Delete SSH key
+      oxide_ssh_key:
+        name: "{{ key_name }}"
+        state: absent
+
+    - name: Delete SSH key check
+      oxide_ssh_key:
+        name: "{{ key_name }}"
+        state: absent
+
+    - name: Create SSH key
+      oxide_ssh_key:
+        name: "{{ key_name }}"
+        public_key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+        state: present
+
+    - name: Failure check - this is expected to fail!
+      oxide_ssh_key:
+        name: "{{ key_name }}"
+        public_key: "different key"
+        state: present
+      ignore_errors: true
