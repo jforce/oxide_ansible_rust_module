@@ -1,5 +1,5 @@
 # Rust Ansible Binary Module POC for Oxide
-Please note, this is a POC and GitHub co-pilot heavily helped me here with the rust! (Props to Zed with it's fancy pants co-pilot integration and vim mode!)
+This is just a proof of concept, and with the API not supporting updates yet it's not a true idempotent module. I previously POC'd a 'traditional' phython collection, see [oxide.computer python collection](https://github.com/jforce/oxide.computer), however, I'm not sure which way is most ideal to go with. I do like this approach, but it feels a bit more non-standard going the way of a python collection. The python collection I started with was/is very slapdash, but its shows the premise of where to go with that. I did enjoy the Rust approach, and I think it's a bit more fun to work with. I'm not sure if it's the 'right' way, would need to ask the Ansible folks.
 
 ## Dev notes
 * Oxide docs:
@@ -16,3 +16,6 @@ Please note, this is a POC and GitHub co-pilot heavily helped me here with the r
 
 ## TO DO
   * Introduce an update function when the API supports it.
+
+## Thoughts
+Maybe I need to revist the python collection and start somewhat afresh now I've gained some understanding of how to develop Ansible modules, however, I feel like I need some advise from the Ansible folks on the best way to go with this. Happy to work on this more, but I'm not sure what is the right direction.
